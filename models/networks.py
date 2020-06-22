@@ -624,12 +624,16 @@ class Flatten(nn.Module):
 
 class ComponentVAE(nn.Module):
 
-    def __init__(self, input_nc, z_dim=16, full_res=False):
+    def __init__(self, input_nc, z_dim=16, full_res=False, raven=True):
         super().__init__()
         self._input_nc = input_nc
         self._z_dim = z_dim
         # full_res = False # full res: 128x128, low res: 64x64
-        h_dim = 4096 if full_res else 1024
+        if raven:
+            h_dim = 6400
+        else:
+            h_dim = (4096 if full_res else 1024)
+
         self.encoder = nn.Sequential(
             nn.Conv2d(input_nc + 1, 32, 3, stride=2, padding=1),
             nn.ReLU(True),
@@ -744,16 +748,16 @@ class Attention(nn.Module):
         self.downblock2 = AttentionBlock(ngf, ngf * 2)
         self.downblock3 = AttentionBlock(ngf * 2, ngf * 4)
         self.downblock4 = AttentionBlock(ngf * 4, ngf * 8)
-        self.downblock5 = AttentionBlock(ngf * 8, ngf * 8, resize=False)
+        self.downblock5 = AttentionBlock(ngf * 8, ngf * 8)
         # no resizing occurs in the last block of each path
         # self.downblock6 = AttentionBlock(ngf * 8, ngf * 8, resize=False)
 
         self.mlp = nn.Sequential(
-            nn.Linear(4 * 4 * ngf * 8, 128),
+            nn.Linear(5 * 5 * ngf * 8, 128),
             nn.ReLU(),
             nn.Linear(128, 128),
             nn.ReLU(),
-            nn.Linear(128, 4 * 4 * ngf * 8),
+            nn.Linear(128, 5 * 5 * ngf * 8),
             nn.ReLU(),
         )
 
@@ -763,7 +767,7 @@ class Attention(nn.Module):
         self.upblock4 = AttentionBlock(2 * ngf * 4, ngf * 2)
         self.upblock5 = AttentionBlock(2 * ngf * 2, ngf)
         # no resizing occurs in the last block of each path
-        self.upblock6 = AttentionBlock(2 * ngf, ngf, resize=False)
+        self.upblock6 = AttentionBlock(2 * ngf, ngf)
 
         self.output = nn.Conv2d(ngf, output_nc, 1)
 
