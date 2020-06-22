@@ -646,7 +646,7 @@ class ComponentVAE(nn.Module):
             Flatten(),
             nn.Linear(h_dim, 256),
             nn.ReLU(True),
-            nn.Linear(256, 32)
+            nn.Linear(256, 2*z_dim)
         )
         self.decoder = nn.Sequential(
             nn.Conv2d(z_dim + 2, 32, 3),
