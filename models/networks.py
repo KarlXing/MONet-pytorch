@@ -767,7 +767,7 @@ class Attention(nn.Module):
         self.upblock4 = AttentionBlock(2 * ngf * 4, ngf * 2)
         self.upblock5 = AttentionBlock(2 * ngf * 2, ngf)
         # no resizing occurs in the last block of each path
-        self.upblock6 = AttentionBlock(2 * ngf, ngf)
+        self.upblock6 = AttentionBlock(2 * ngf, ngf, resize=False)
 
         self.output = nn.Conv2d(ngf, output_nc, 1)
 
