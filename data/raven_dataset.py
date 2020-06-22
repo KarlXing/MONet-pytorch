@@ -1,5 +1,5 @@
 import os
-
+import torch
 import torchvision.transforms.functional as TF
 
 from data.base_dataset import BaseDataset

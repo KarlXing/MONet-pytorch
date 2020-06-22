@@ -22,7 +22,7 @@ class MONetModel(BaseModel):
             the modified parser.
         """
         parser.set_defaults(batch_size=64, lr=1e-4, display_ncols=9, niter_decay=0,
-                            dataset_mode='clevr', niter=int(64e6 // 7e4))
+                            dataset_mode='raven', niter=int(64e6 // 7e4))
         parser.add_argument('--num_slots', metavar='K', type=int, default=9, help='Number of supported slots')
         parser.add_argument('--z_dim', type=int, default=10, help='Dimension of individual z latent per slot')
         if is_train:
